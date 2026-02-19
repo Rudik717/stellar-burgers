@@ -6,7 +6,7 @@ import {
 } from 'react-redux';
 import { burgerBuilderSlice } from '../slices/burger-builder-slice';
 import { feedSlice } from '../slices/feed-slice';
-import { ingredientSlice } from '../slices/ingridient-slice';
+import { ingredientSlice } from '../slices/ingredient-slice';
 import { newOrderSlice } from '../slices/new_order_slice';
 import { OrdersListSlice } from '../slices/order-list-slice';
 import { userSlice } from '../slices/user-slice';
