@@ -20,7 +20,7 @@ export const OrderInfo: FC = () => {
   });
 
   const ingredients: TIngredient[] = useSelector(getIngredients);
-  const { id } = useParams<{ id: string }>();
+  const id = Number(useParams().number);
 
   useEffect(() => {
     getOrderByNumberApi(Number(id))
