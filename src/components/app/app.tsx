@@ -25,6 +25,10 @@ const App = () => {
   const location = useLocation();
   const background = location.state?.background;
 
+  function closeModal() {
+    return navigate(-1);
+  }
+
   useEffect(() => {
     dispatch(getIngredientsList());
     dispatch(getUserFetch());
@@ -84,6 +88,16 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route path='/feed/:number' element={<OrderInfo />} />
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <ProtectedRoute>
+              <OrderInfo />
+            </ProtectedRoute>
+          }
+        />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
       {background && (
@@ -91,7 +105,7 @@ const App = () => {
           <Route
             path='/feed/:number'
             element={
-              <Modal title='' onClose={() => navigate(-1)}>
+              <Modal title='' onClose={closeModal}>
                 <OrderInfo />
               </Modal>
             }
@@ -99,7 +113,7 @@ const App = () => {
           <Route
             path='/ingredients/:id'
             element={
-              <Modal title='' onClose={() => navigate(-1)}>
+              <Modal title='' onClose={closeModal}>
                 <IngredientDetails />
               </Modal>
             }
@@ -107,7 +121,7 @@ const App = () => {
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal title='' onClose={() => navigate(-1)}>
+              <Modal title='' onClose={closeModal}>
                 <ProtectedRoute>
                   <OrderInfo />
                 </ProtectedRoute>

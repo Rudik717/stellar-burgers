@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useEffect } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,8 @@ import {
   createOrder,
   resetOrder,
   getOrderIsLoading,
-  getOrder
+  getOrder,
+  getIsSuccess
 } from '../../slices/new_order_slice';
 import { isAuthSelector } from '../../slices/user-slice';
 
@@ -25,6 +26,7 @@ export const BurgerConstructor: FC = () => {
   );
   const orderRequest = useSelector(getOrderIsLoading);
   const orderModalData = useSelector(getOrder);
+  const isSuccess = useSelector(getIsSuccess);
 
   const onOrderClick = () => {
     if (!isAuth) return navigate('/login');
@@ -32,12 +34,19 @@ export const BurgerConstructor: FC = () => {
 
     const orderData = [
       constructorItems.bun._id,
-      ...constructorItems.ingredients.map((ingredient) => ingredient._id)
+      ...constructorItems.ingredients.map((ingredient) => ingredient._id),
+      constructorItems.bun._id
     ];
     dispatch(createOrder(orderData));
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(resetBuilder());
+    }
+  }, [isSuccess, dispatch]);
+
   const closeOrderModal = () => {
-    dispatch(resetBuilder());
     dispatch(resetOrder());
     navigate('/');
   };

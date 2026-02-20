@@ -2,6 +2,7 @@ import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useSelector } from '../../services/store';
 import { isAuthSelector } from '../../slices/user-slice';
+import { Preloader } from '../ui/preloader/preloader';
 
 interface ProtectedRouteProps {
   isNotAuth?: boolean;
@@ -12,15 +13,23 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   isNotAuth = false,
   children
 }) => {
-  const isAuthChecked = useSelector(isAuthSelector);
+  const { isAuth, isAuthChecked } = useSelector((state) => state.user);
   const location = useLocation();
 
-  const shouldRedirect =
-    (!isNotAuth && !isAuthChecked) || (isNotAuth && isAuthChecked);
+  if (!isAuthChecked) {
+    return <Preloader />;
+  }
+
+  const shouldRedirect = (!isNotAuth && !isAuth) || (isNotAuth && isAuth);
 
   if (shouldRedirect) {
-    const redirectTo = isNotAuth ? location.state?.from || '/' : '/login';
-    return <Navigate replace to={redirectTo} state={{ from: location }} />;
+    return (
+      <Navigate
+        replace
+        to={isNotAuth ? location.state?.from || '/' : '/login'}
+        state={{ from: location }}
+      />
+    );
   }
 
   return children;

@@ -43,12 +43,14 @@ export const logout = createAsyncThunk('user/logout', async () => {
 
 export type TUserState = {
   isAuth: boolean;
+  isAuthChecked: boolean;
   user: TUser;
   errorMessage?: string | undefined;
 };
 
 export const initialState: TUserState = {
   isAuth: false,
+  isAuthChecked: false,
   user: {
     email: '',
     name: ''
@@ -76,6 +78,7 @@ export const userSlice = createSlice({
     builder
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isAuth = true;
+        state.isAuthChecked = true;
         state.user = action.payload.user;
         state.errorMessage = '';
       })
@@ -90,11 +93,16 @@ export const userSlice = createSlice({
     builder
       .addCase(getUserFetch.fulfilled, (state, action) => {
         state.isAuth = true;
+        state.isAuthChecked = true;
         state.user = action.payload.user;
       })
       .addCase(getUserFetch.rejected, (state, action) => {
         state.isAuth = false;
+        state.isAuthChecked = true;
         state.errorMessage = action.error.message!;
+      })
+      .addCase(getUserFetch.pending, (state) => {
+        state.isAuthChecked = false;
       });
     builder
       .addCase(updateUser.fulfilled, (state, action) => {
