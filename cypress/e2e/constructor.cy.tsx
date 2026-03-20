@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+import { TIngredient } from '../../src/utils/types';
 
 describe('Тест ингредиентов в конструкторе', () => {
   beforeEach(() => {
@@ -25,28 +26,51 @@ describe('Тест ингредиентов в конструкторе', () => 
 });
 
 describe('Тест модальных окон', () => {
+  let ingredients: TIngredient[] = [];
+
   beforeEach(() => {
+    cy.fixture('ingredients.json').then((data) => {
+      ingredients = data.data as TIngredient[];
+    });
+
     cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' });
     cy.viewport(1366, 768);
     cy.visit('');
   });
 
-  it('open modal', () => {
-    cy.contains('Ингредиент 1').click();
-    cy.get('#modals').contains('Ингредиент 1').should('exist');
+  it('открытие модального окна и проверка данных ингредиента', () => {
+    const ingredientName = 'Ингредиент 1';
+    const ingredientData = ingredients.find((i) => i.name === ingredientName);
+
+    expect(ingredientData).to.exist; // sanity check
+
+    cy.contains(ingredientName).click();
+
+    cy.get('#modals').contains(ingredientName).should('exist');
     cy.contains('Информация об ингредиенте').should('exist');
+
+    cy.get('#modals').within(() => {
+      cy.contains(`${ingredientData!.calories}`).should('exist');
+      cy.contains(`${ingredientData!.proteins}`).should('exist');
+      cy.contains(`${ingredientData!.fat}`).should('exist');
+      cy.contains(`${ingredientData!.carbohydrates}`).should('exist');
+    });
   });
 
-  it('close modal by clicking on the cross', () => {
-    cy.contains('Ингредиент 1').click();
+  it('закрытие модалки по клику на крестик', () => {
+    const ingredientName = 'Ингредиент 1';
+    cy.contains(ingredientName).click();
     cy.contains('Информация об ингредиенте').should('exist');
+
     cy.get('[data-testid=button-modal]').click();
     cy.contains('Информация об ингредиенте').should('not.exist');
   });
 
-  it('close modal by clicking on overlay', () => {
-    cy.contains('Ингредиент 1').click();
+  it('закрытие модалки по клику на оверлей', () => {
+    const ingredientName = 'Ингредиент 1';
+    cy.contains(ingredientName).click();
     cy.contains('Информация об ингредиенте').should('exist');
+
     cy.get('[data-testid=modal-overlay]').click('left', { force: true });
     cy.contains('Информация об ингредиенте').should('not.exist');
   });
