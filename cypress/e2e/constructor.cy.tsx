@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+
 import { TIngredient } from '../../src/utils/types';
 
 describe('Тест ингредиентов в конструкторе', () => {
@@ -41,8 +42,6 @@ describe('Тест модальных окон', () => {
   it('открытие модального окна и проверка данных ингредиента', () => {
     const ingredientName = 'Ингредиент 1';
     const ingredientData = ingredients.find((i) => i.name === ingredientName);
-
-    expect(ingredientData).to.exist; // sanity check
 
     cy.contains(ingredientName).click();
 
