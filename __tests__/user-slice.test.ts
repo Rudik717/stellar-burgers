@@ -106,7 +106,7 @@ describe('тестирование userSlice', () => {
       isAuth: false,
       isAuthChecked: true,
       user: { email: '', name: '' },
-      errorMessage: 'Ошибка загрузки'
+      errorMessage: ''
     });
   });
 

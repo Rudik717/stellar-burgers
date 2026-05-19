@@ -1,10 +1,17 @@
-import { FC, SyntheticEvent, useState } from 'react';
+import { FC, SyntheticEvent, useState, useEffect } from 'react';
 import { RegisterUI } from '@ui-pages';
 import { useDispatch, useSelector } from '../../services/store';
-import { getErrorMessage, registerUser } from '../../slices/user-slice';
+import {
+  getErrorMessage,
+  registerUser,
+  clearError
+} from '../../slices/user-slice';
 
 export const Register: FC = () => {
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
   const errorMessage = useSelector(getErrorMessage);
 
   const [userName, setUserName] = useState('');

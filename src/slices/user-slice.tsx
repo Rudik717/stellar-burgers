@@ -61,7 +61,11 @@ export const initialState: TUserState = {
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    clearError(state) {
+      state.errorMessage = '';
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.fulfilled, (state, action) => {
@@ -99,7 +103,6 @@ export const userSlice = createSlice({
       .addCase(getUserFetch.rejected, (state, action) => {
         state.isAuth = false;
         state.isAuthChecked = true;
-        state.errorMessage = action.error.message!;
       })
       .addCase(getUserFetch.pending, (state) => {
         state.isAuthChecked = false;
@@ -131,3 +134,4 @@ export const userSlice = createSlice({
 
 export const { isAuthSelector, getUser, getUserName, getErrorMessage } =
   userSlice.selectors;
+export const { clearError } = userSlice.actions;
