@@ -9,7 +9,6 @@ import {
   ProfileOrders,
   NotFound404
 } from '@pages';
-import '../../index.css';
 import styles from './app.module.css';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
